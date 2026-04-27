@@ -16,10 +16,12 @@ class SessionsController {
 
         const { email, password } = bodySchema.parse(request.body)
 
+        // Consulta ao banco -> Mover para repository
         const user = await prisma.user.findFirst({
             where: { email },
         })
 
+        // Regra de negócio -> Mover para services
         if(!user){
             throw new AppError("Invalid email or password", 401)
         }

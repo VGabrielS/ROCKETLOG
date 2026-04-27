@@ -3,6 +3,7 @@ import { prisma } from "@/database/prisma";
 import { z } from "zod";
 import { AppError } from "@/utils/AppError";
 
+
 class DeliveryLogsController {
   async create(request: Request, response: Response) {
     const bodySchema = z.object({
@@ -12,10 +13,14 @@ class DeliveryLogsController {
 
     const { delivery_id, description } = bodySchema.parse(request.body);
 
+    /*
+
+    // Consulta ao banco -> Mover para repository
     const delivery = await prisma.delivery.findUnique({
       where: { id: delivery_id },
     });
-
+    
+    // Regra de negócio -> Mover para services
     if (!delivery) {
       throw new AppError("Delivery not found", 404);
     }
@@ -28,21 +33,23 @@ class DeliveryLogsController {
       throw new AppError("change status to shipped", 404);
     }
 
+    // Banco de dados
     await prisma.deliveryLog.create({
       data: {
         deliveryId: delivery_id,
         description,
       },
     });
+    */
 
-    return response.status(201).json();
+    return gitresponse.status(201).json();
   }
 
   async show(request: Request, response: Response) {
     const paramsSchema = z.object({
       delivery_id: z.string().uuid(),
     });
-
+    
     const { delivery_id } = paramsSchema.parse(request.params);
 
     const delivery = await prisma.delivery.findUnique({
