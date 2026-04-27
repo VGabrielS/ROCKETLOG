@@ -42,7 +42,7 @@ class DeliveryLogsController {
     });
     */
 
-    return gitresponse.status(201).json();
+    return response.status(201).json();
   }
 
   async show(request: Request, response: Response) {
