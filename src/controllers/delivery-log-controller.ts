@@ -3,6 +3,7 @@ import { prisma } from "@/database/prisma";
 import { z } from "zod";
 import { AppError } from "@/utils/AppError";
 
+import { createDeliveryLogService } from "@/services/delivery-create-log-services";
 
 class DeliveryLogsController {
   async create(request: Request, response: Response) {
@@ -42,26 +43,28 @@ class DeliveryLogsController {
     });
     */
 
-    return response.status(201).json();
+    const result = await createDeliveryLogService({ delivery_id, description });
+
+    return response.status(201).json(result);
   }
 
   async show(request: Request, response: Response) {
     const paramsSchema = z.object({
       delivery_id: z.string().uuid(),
     });
-    
+
     const { delivery_id } = paramsSchema.parse(request.params);
 
     const delivery = await prisma.delivery.findUnique({
       where: { id: delivery_id },
       include: {
         logs: true,
-        user: true
-      }
+        user: true,
+      },
     });
 
-    if(!delivery){
-      return response.status(404).json({ message: "delivery not found "})
+    if (!delivery) {
+      return response.status(404).json({ message: "delivery not found " });
     }
 
     if (
