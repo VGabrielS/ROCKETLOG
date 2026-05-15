@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { prisma } from "@/database/prisma";
 import { z } from "zod";
-import { AppError } from "@/utils/AppError";
 
+import { showDeliveryLogService } from "@/services/delivery-show-log-services";
 import { createDeliveryLogService } from "@/services/delivery-create-log-services";
 
 class DeliveryLogsController {
@@ -54,7 +53,9 @@ class DeliveryLogsController {
     });
 
     const { delivery_id } = paramsSchema.parse(request.params);
+    const { id, role } = request.user;
 
+    /*
     const delivery = await prisma.delivery.findUnique({
       where: { id: delivery_id },
       include: {
@@ -62,6 +63,7 @@ class DeliveryLogsController {
         user: true,
       },
     });
+
 
     if (!delivery) {
       return response.status(404).json({ message: "delivery not found " });
@@ -75,6 +77,16 @@ class DeliveryLogsController {
     }
 
     return response.json(delivery);
+
+    */
+
+    const result = await showDeliveryLogService({
+      delivery_id,  
+      role,
+      userId: id,
+    });
+
+    return response.json(result)
   }
 }
 
