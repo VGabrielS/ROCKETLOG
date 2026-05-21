@@ -17,3 +17,14 @@ export async function findDeliveryByIdWithLogs(delivery_id: string) {
     },
   });
 }
+
+export async function createDeliveryLog(data: {delivery_id: string, description: string}) {
+
+    return await prisma.deliveryLog.create({
+      data: {
+        deliveryId: data.delivery_id,
+        description: data.description,
+      },
+    });
+
+}

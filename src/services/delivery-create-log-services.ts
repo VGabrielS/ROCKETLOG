@@ -1,6 +1,8 @@
 import { AppError } from "@/utils/AppError";
-import { findDeliveryById } from "@/repository/delivery.repository";
-import { createDeliveryLog } from "@/repository/delivery-log-repository";
+import {
+  findDeliveryById,
+  createDeliveryLog,
+} from "@/repository/delivery-logs.repository";
 
 type RequestData = {
   delivery_id: string;

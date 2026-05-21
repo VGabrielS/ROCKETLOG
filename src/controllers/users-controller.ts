@@ -14,6 +14,7 @@ class UsersController{
 
         const { name, email, password } = bodySchema.parse(request.body)
 
+        // repository
         const userWithSameEmail = await prisma.user.findFirst({where: { email }})
 
         if (userWithSameEmail) {

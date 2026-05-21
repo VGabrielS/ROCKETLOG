@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "@/database/prisma";
+import { createDeliveriesRepository, findManyDeliveries } from "@/repository/deliveries-repository";
 import{ z } from "zod"
 
 class DeliveriesController {
@@ -11,22 +11,33 @@ class DeliveriesController {
 
         const { user_id, description } = bodySchema.parse(request.body)
 
+        const result = await createDeliveriesRepository({user_id, description})
+
+        /*
+        // transferir para repository 
         await prisma.delivery.create({
             data:{
                 userId: user_id,
                 description: description
             }
         })
+        */
 
-        return response.status(201).json()
+        return response.status(201).json(result)
     }
 
     async index(request:Request, response: Response){
+        
+        /*
+        // transferir para repository 
         const deliveries = await prisma.delivery.findMany({
             include: {
                 user: {select: { name:true, email: true }}
             }
         })
+            */
+
+        const  deliveries = await findManyDeliveries()
 
         return response.json(deliveries)
     }
