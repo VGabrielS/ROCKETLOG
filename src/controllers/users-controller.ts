@@ -10,7 +10,7 @@ class UsersController{
             name: z.string().trim().min(2),
             email: z.string().email().toLowerCase(),
             password: z.string().min(6)
-        })
+            })
 
         const { name, email, password } = bodySchema.parse(request.body)
 

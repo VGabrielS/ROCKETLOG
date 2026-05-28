@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { prisma } from "@/database/prisma";
+import { DeliveryStatusUpdate } from "@/services/deliveries-status-services";
 import { z } from "zod";
 
 class DeliveriesStatusController {
   async update(request: Request, response: Response) {
-    const paramsSchema = await z.object({
+    const paramsSchema = z.object({
       id: z.string().uuid(),
     });
 
@@ -15,6 +15,9 @@ class DeliveriesStatusController {
     const { id } = paramsSchema.parse(request.params);
     const { status } = bodySchema.parse(request.body);
 
+    const result = await DeliveryStatusUpdate({ id, status })
+   
+    /*
     await prisma.delivery.update({
       data: {
         status,
@@ -22,17 +25,19 @@ class DeliveriesStatusController {
       where: {
         id,
       }
-
     })
 
+    
+    
     await prisma.deliveryLog.create({
       data:{
         deliveryId: id,
         description: status
       }
     })
+    */    
 
-    return response.json()
+    return response.json(result)
   }
 }
 
