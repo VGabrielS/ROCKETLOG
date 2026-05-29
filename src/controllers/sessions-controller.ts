@@ -1,21 +1,20 @@
 import { Request, Response } from "express";
-import { authConfig } from "@/configs/auth";
-import { AppError } from "@/utils/AppError";
-import { prisma } from "@/database/prisma";
-import { compare } from "bcrypt";
-import { sign } from "jsonwebtoken";
-import { z } from "zod"
+import { z } from "zod";
+
+import { SessionsServices } from "@/services/sessions-services";
 
 class SessionsController {
-    async create(request:Request, response: Response){
-        const bodySchema = z.object({
-            email: z.string().email().toLowerCase(),
-            password: z.string().min(6),
+  async create(request: Request, response: Response) {
+    const bodySchema = z.object({
+      email: z.string().email().toLowerCase(),
+      password: z.string().min(6),
+    });
 
-        })
+    const { email, password } = bodySchema.parse(request.body);
 
-        const { email, password } = bodySchema.parse(request.body)
+    const sessions = await SessionsServices({ email, password });
 
+    /*
         // Consulta ao banco -> Mover para repository
         const user = await prisma.user.findFirst({
             where: { email },
@@ -40,9 +39,10 @@ class SessionsController {
         })
 
         const { password:hashedPassword, ...userWithoutPassword } = user 
+        */
 
-        return response.json({ token, user: userWithoutPassword})
-    }
+    return response.json(sessions);
+  }
 }
 
-export { SessionsController }
+export { SessionsController };
