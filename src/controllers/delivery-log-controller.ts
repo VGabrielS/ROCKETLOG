@@ -13,35 +13,6 @@ class DeliveryLogsController {
 
     const { delivery_id, description } = bodySchema.parse(request.body);
 
-    /*
-
-    // Consulta ao banco -> Mover para repository
-    const delivery = await prisma.delivery.findUnique({
-      where: { id: delivery_id },
-    });
-    
-    // Regra de negócio -> Mover para services
-    if (!delivery) {
-      throw new AppError("Delivery not found", 404);
-    }
-
-    if(delivery.status === "delivered"){
-        throw new AppError("This order has already been delivered")
-    }
-
-    if (delivery.status === "processing") {
-      throw new AppError("change status to shipped", 404);
-    }
-
-    // Banco de dados
-    await prisma.deliveryLog.create({
-      data: {
-        deliveryId: delivery_id,
-        description,
-      },
-    });
-    */
-
     const result = await createDeliveryLogService({ delivery_id, description });
 
     return response.status(201).json(result);
@@ -55,31 +26,7 @@ class DeliveryLogsController {
     const { delivery_id } = paramsSchema.parse(request.params);
     const { id, role } = request.user;
 
-    /*
-    const delivery = await prisma.delivery.findUnique({
-      where: { id: delivery_id },
-      include: {
-        logs: true,
-        user: true,
-      },
-    });
-
-
-    if (!delivery) {
-      return response.status(404).json({ message: "delivery not found " });
-    }
-
-    if (
-      request.user?.role === "customer" &&
-      request.user.id !== delivery?.userId
-    ) {
-      throw new AppError("The user can only viem their deliveries", 401);
-    }
-
-    return response.json(delivery);
-
-    */
-
+  
     const result = await showDeliveryLogService({
       delivery_id,  
       role,

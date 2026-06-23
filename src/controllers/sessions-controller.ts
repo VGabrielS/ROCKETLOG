@@ -14,33 +14,6 @@ class SessionsController {
 
     const sessions = await SessionsServices({ email, password });
 
-    /*
-        // Consulta ao banco -> Mover para repository
-        const user = await prisma.user.findFirst({
-            where: { email },
-        })
-
-        // Regra de negócio -> Mover para services
-        if(!user){
-            throw new AppError("Invalid email or password", 401)
-        }
-
-        const passwordMatched = await compare(password, user.password)
-
-        if(!passwordMatched){
-            throw new AppError("Invalid email or password", 401)
-        }
-
-        const {secret, expiresIn} = authConfig.jwt
-
-        const token = sign({ role:user.role ?? "customer" }, secret, {
-            subject: user.id,
-            expiresIn,
-        })
-
-        const { password:hashedPassword, ...userWithoutPassword } = user 
-        */
-
     return response.json(sessions);
   }
 }
